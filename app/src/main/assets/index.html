@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>كلمات متقاطعة</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- الشاشة الرئيسية -->
+<section id="home" class="screen active">
+  <div class="home-wrap">
+    <div class="logo">
+      <div class="logo-grid">
+        <span>ك</span><span>ل</span><span>م</span><span>ة</span>
+        <span class="b"></span><span>ع</span><span class="b"></span><span class="b"></span>
+        <span class="b"></span><span>ب</span><span class="b"></span><span class="b"></span>
+      </div>
+      <h1>كلمات متقاطعة</h1>
+      <p class="tag">تحدَّ الكمبيوتر بالصور والمرادفات</p>
+    </div>
+    <button class="btn big primary" id="btnPlay">▶ العب</button>
+    <button class="btn big" id="btnLevels">🗺️ المستويات</button>
+    <button class="btn big" id="btnHelp">❓ طريقة اللعب</button>
+    <button class="btn small ghost" id="btnSound">🔊 الصوت: يعمل</button>
+  </div>
+</section>
+
+<!-- اختيار المستوى -->
+<section id="levels" class="screen">
+  <header class="bar">
+    <button class="icon-btn" data-back>→</button>
+    <h2>المستويات</h2>
+    <span class="spacer"></span>
+  </header>
+  <div id="levelGrid" class="level-grid"></div>
+</section>
+
+<!-- طريقة اللعب -->
+<section id="help" class="screen">
+  <header class="bar">
+    <button class="icon-btn" data-back>→</button>
+    <h2>طريقة اللعب</h2>
+    <span class="spacer"></span>
+  </header>
+  <div class="help-body">
+    <p>🧩 فوق كل <b>عمود</b> صورة تدل على الكلمة العمودية، وفي بداية كل <b>سطر</b> صورة أو كلمة مرادفة للكلمة الأفقية. الرقم الصغير هو عدد حروف الكلمة.</p>
+    <p>🔤 في كل دور تحصل على مجموعة <b>حروف</b>. اضغط على حرف ثم على المربع المناسب لوضعه (أو المربع أولاً ثم الحرف).</p>
+    <p>✅ الحرف الصحيح = <b>نقطة</b>. عند اكتمال كلمة يحصل من وضع أكثر حروفها على نقاط إضافية بعدد حروفها.</p>
+    <p>❌ الحرف الخاطئ يخصم نقطة <b>وينهي دورك</b>.</p>
+    <p>⏭️ زر <b>باص</b>: تتخطى دورك وتحصل على حروف جديدة. بعد وضع حرف واحد على الأقل يصبح الزر <b>إنهاء الدور</b>.</p>
+    <p>🤖 بعدها يلعب الكمبيوتر دوره. اجمع نقاطاً أكثر منه لتفوز وتفتح المستوى التالي.</p>
+    <p>🆘 وسائل المساعدة:<br>
+      💡 <b>كشف حرف</b>: اختر مربعاً ليظهر حرفه الصحيح.<br>
+      🎯 <b>تلميح</b>: يضيء لك حرفاً من حروفك والمربع الذي يناسبه.</p>
+    <p>📈 كلما تقدمت تكبر الشبكة، وتصبح الكلمات أطول وأصعب، وتتحول الصور إلى مرادفات، ويصبح الكمبيوتر أذكى.</p>
+    <p>⭐ النجوم: الفوز = نجمة، ونجمة إضافية إذا فزت بفارق 5 نقاط أو أكثر، ونجمة ثالثة إذا لم تستخدم وسائل المساعدة.</p>
+  </div>
+</section>
+
+<!-- اللعبة -->
+<section id="game" class="screen">
+  <header class="bar game-bar">
+    <button class="icon-btn" id="btnMenu">☰</button>
+    <div class="score-box" id="scoreP">
+      <span class="who">🙂 أنت</span><span class="pts" id="ptsP">0</span>
+    </div>
+    <div class="level-tag" id="levelTag">مستوى 1</div>
+    <div class="score-box cpu" id="scoreC">
+      <span class="who">🤖 الكمبيوتر</span><span class="pts" id="ptsC">0</span>
+    </div>
+  </header>
+
+  <div class="status-row">
+    <div class="status" id="status">دورك</div>
+    <span class="bag" id="bagCount">🎒 0</span>
+  </div>
+
+  <div class="board-wrap">
+    <div id="board" class="board" dir="rtl"></div>
+  </div>
+
+  <div class="clue-info" id="clueInfo"></div>
+
+  <div class="rack-area">
+    <div class="rack-label">حروفك</div>
+    <div id="rack" class="rack"></div>
+  </div>
+
+  <div class="actions">
+    <button class="act" id="aidReveal"><span class="ic">💡</span><span>كشف حرف</span><b class="cnt" id="cntReveal">2</b></button>
+    <button class="act" id="aidHint"><span class="ic">🎯</span><span>تلميح</span><b class="cnt" id="cntHint">2</b></button>
+    <button class="act pass" id="btnPass"><span class="ic">⏭️</span><span id="passLabel">باص</span></button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</section>
+
+<!-- نافذة -->
+<div class="modal" id="modal">
+  <div class="card">
+    <div class="m-emoji" id="mEmoji">🏆</div>
+    <h3 id="mTitle">فزت!</h3>
+    <div class="stars" id="mStars"></div>
+    <p id="mText"></p>
+    <div class="m-btns" id="mBtns"></div>
+  </div>
+</div>
+
+<script src="words.js"></script>
+<script src="puzzle.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

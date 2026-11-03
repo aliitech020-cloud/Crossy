@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- شبكة كلمات متقاطعة 3×3 داخل المنطقة الآمنة للأيقونة -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:fillColor="#FFFAF0" android:pathData="M32,32h13v13h-13z M47.5,32h13v13h-13z M63,32h13v13h-13z M47.5,47.5h13v13h-13z M32,63h13v13h-13z M47.5,63h13v13h-13z" />
+    <path android:fillColor="#FFC83D" android:pathData="M63,47.5h13v13h-13z" />
+    <path android:fillColor="#1FA37A" android:pathData="M63,63h13v13h-13z" />
+    <path android:fillColor="#E2574C" android:pathData="M32,47.5h13v13h-13z" />
+</vector>
