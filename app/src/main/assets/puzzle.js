@@ -1,6 +1,7 @@
-// مولّد شبكات الكلمات المتقاطعة حسب المستوى
-// كل صف فيه كلمة أفقية واحدة على الأكثر، وكل عمود فيه كلمة عمودية واحدة على الأكثر،
-// حتى تكون لكل صف صورة/مرادف في بدايته ولكل عمود صورة في أعلاه.
+// Crossword grid generator.
+// Each row holds at most one ACROSS word and each column at most one DOWN word,
+// so every row has one clue at its start and every column one clue on top.
+// A clue can be a picture or a word, in rows and columns alike.
 (function (global) {
   'use strict';
 
@@ -24,11 +25,11 @@
       target: Math.min(3 + Math.floor((level - 1) / 2), maxBySize[size]),
       maxTier: level <= 4 ? 1 : level <= 12 ? 2 : 3,
       minLen: level <= 20 ? 3 : 4,
-      // احتمال أن يكون تلميح الصف كلمة مرادفة بدل الصورة
-      textClueProb: level <= 3 ? 0 : level <= 8 ? 0.3 : level <= 18 ? 0.6 : 0.85,
-      // كلما زاد المستوى نفضّل الكلمات الأطول والأصعب
+      // chance that a clue is a word (synonym) instead of a picture
+      textClueProb: level <= 3 ? 0.2 : level <= 8 ? 0.35 : level <= 18 ? 0.5 : 0.6,
+      // higher levels prefer longer and harder words
       hardBias: level <= 6 ? 0 : Math.min(1.5, (level - 6) / 15),
-      // صعوبة الكمبيوتر
+      // computer opponent strength
       cpuKnow: Math.min(0.7, 0.25 + level * 0.015),
       cpuLearn: Math.min(0.35, 0.1 + level * 0.008),
       cpuMax: Math.min(3, 1 + Math.floor(level / 8)),
@@ -48,8 +49,8 @@
       if (len < p.minLen || len > p.size || w.t > p.maxTier) continue;
       var weight = (1 + p.hardBias * (w.t - 1)) * (1 + p.hardBias * 0.35 * (len - 3));
       var item = { word: w, weight: weight, idx: i };
-      if (w.e) down.push(item);
-      if (w.e || p.textClueProb > 0) across.push(item);
+      across.push(item);
+      down.push(item);
     }
     return { across: across, down: down };
   }
@@ -111,7 +112,7 @@
       return list[list.length - 1];
     }
 
-    // الكلمة الأولى أفقية في صف عشوائي قريب من الوسط
+    // first word goes across in a random row
     var firstList = pool.across.filter(function (it) { return it.word.l.length >= Math.min(n, 4) || n <= 5; });
     if (!firstList.length) firstList = pool.across;
     var first = pickWeighted(firstList);
@@ -165,7 +166,7 @@
       if (!best || res.length > best.length) best = res;
       if (best.length >= p.target) break;
     }
-    // قصّ الشبكة إلى حدود الكلمات
+    // crop the grid to the words' bounding box
     var minR = 99, minC = 99, maxR = -1, maxC = -1;
     best.forEach(function (pl) {
       var len = pl.item.word.l.length;
@@ -183,7 +184,7 @@
     var out = best.map(function (pl, wi) {
       var w = pl.item.word, r0 = pl.r - minR, c0 = pl.c - minC;
       var mode = 'emoji';
-      if (pl.dir === 'a' && (!w.e || rng() < p.textClueProb)) mode = 'text';
+      if (!w.e || rng() < p.textClueProb) mode = 'text';
       for (var k = 0; k < w.l.length; k++) {
         var r = pl.dir === 'd' ? r0 + k : r0, c = pl.dir === 'a' ? c0 + k : c0;
         if (!cells[r][c]) cells[r][c] = { letter: w.l[k], a: -1, d: -1, owner: null };

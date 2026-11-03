@@ -1,33 +1,35 @@
-# كلمات متقاطعة 🧩
+# Crossy Words 🧩
 
-لعبة كلمات متقاطعة عربية لأجهزة أندرويد، تلعب فيها ضد الكمبيوتر.
+A picture crossword game for Android where you play against the computer.
 
-- فوق كل **عمود** صورة تدل على الكلمة، وفي بداية كل **سطر** صورة أو كلمة مرادفة.
-- في كل دور تحصل على مجموعة حروف لتضعها في المربعات، ثم يلعب الكمبيوتر دوره.
-- زر **باص** لتخطي دورك مع تبديل حروفك.
-- وسيلتا مساعدة: 💡 **كشف حرف** و 🎯 **تلميح**.
-- 100 مستوى تزداد صعوبتها: شبكة أكبر، كلمات أطول وأصعب، مرادفات بدل الصور، وكمبيوتر أذكى.
+- Every **column** has a clue on top and every **row** has a clue at its start.
+  A clue can be a **picture** or a **word** (synonym), in rows and columns alike.
+- Each turn you get a set of letters: **drag** them onto the squares. Then the computer plays.
+- **Pass** skips your turn and swaps your letters.
+- Two helpers: 💡 **Reveal** a square and 🎯 **Hint**.
+- 100 levels that get harder: bigger grids, longer and harder words, more word clues
+  instead of pictures, and a smarter computer.
 
-## التحميل والتثبيت
+## Download & install
 
-1. افتح صفحة **Releases** في هذا المستودع من هاتفك.
-2. حمّل أحدث ملف `crossy-XX.apk`.
-3. افتحه واسمح بالتثبيت من مصادر غير معروفة إذا طُلب منك.
+1. Open the **Releases** page of this repository on your phone.
+2. Download the latest `crossy-XX.apk`.
+3. Open it and allow installing from unknown sources if asked.
 
-يتم بناء ملف APK تلقائياً عبر GitHub Actions عند كل تحديث (`.github/workflows/build-apk.yml`).
+The APK is built automatically by GitHub Actions on every push (`.github/workflows/build-apk.yml`).
 
-## البنية
+## Project layout
 
-- `app/src/main/assets/` — اللعبة (HTML/CSS/JS) وتعمل بدون إنترنت.
-  - `words.js` قاعدة الكلمات (الكلمة | الصورة | المرادف | الصعوبة) — يمكنك إضافة كلمات بسهولة.
-  - `puzzle.js` مولّد الشبكات وإعدادات صعوبة كل مستوى.
-  - `game.js` منطق اللعب والكمبيوتر.
-- `app/src/main/java/.../MainActivity.java` — غلاف أندرويد (WebView).
-- `tools/check-levels.js` — يتحقق من أن كل المستويات تُولَّد بشكل صحيح: `node tools/check-levels.js`.
+- `app/src/main/assets/` – the game (HTML/CSS/JS), works offline.
+  - `words.js` – word list (`WORD|emoji|clue|tier`); add your own words here.
+  - `puzzle.js` – grid generator and per-level difficulty settings.
+  - `game.js` – gameplay, drag & drop and the computer opponent.
+- `app/src/main/java/.../MainActivity.java` – Android WebView wrapper.
+- `tools/check-levels.js` – checks every level generates correctly: `node tools/check-levels.js`.
 
-## البناء محلياً
+## Build locally
 
-يتطلب Android SDK و JDK 17:
+Requires the Android SDK and JDK 17:
 
 ```
 ./gradlew assembleRelease

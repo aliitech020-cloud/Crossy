@@ -1,107 +1,107 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>كلمات متقاطعة</title>
+<title>Crossy Words</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- الشاشة الرئيسية -->
+<!-- Home -->
 <section id="home" class="screen active">
   <div class="home-wrap">
     <div class="logo">
       <div class="logo-grid">
-        <span>ك</span><span>ل</span><span>م</span><span>ة</span>
-        <span class="b"></span><span>ع</span><span class="b"></span><span class="b"></span>
-        <span class="b"></span><span>ب</span><span class="b"></span><span class="b"></span>
+        <span>W</span><span>O</span><span>R</span><span>D</span>
+        <span>I</span><span class="b"></span><span class="b"></span><span class="b"></span>
+        <span>N</span><span class="b"></span><span class="b"></span><span class="b"></span>
       </div>
-      <h1>كلمات متقاطعة</h1>
-      <p class="tag">تحدَّ الكمبيوتر بالصور والمرادفات</p>
+      <h1>Crossy Words</h1>
+      <p class="tag">Picture crossword vs the computer</p>
     </div>
-    <button class="btn big primary" id="btnPlay">▶ العب</button>
-    <button class="btn big" id="btnLevels">🗺️ المستويات</button>
-    <button class="btn big" id="btnHelp">❓ طريقة اللعب</button>
-    <button class="btn small ghost" id="btnSound">🔊 الصوت: يعمل</button>
+    <button class="btn big primary" id="btnPlay">▶ Play</button>
+    <button class="btn big" id="btnLevels">🗺️ Levels</button>
+    <button class="btn big" id="btnHelp">❓ How to play</button>
+    <button class="btn small ghost" id="btnSound">🔊 Sound: on</button>
   </div>
 </section>
 
-<!-- اختيار المستوى -->
+<!-- Levels -->
 <section id="levels" class="screen">
   <header class="bar">
-    <button class="icon-btn" data-back>→</button>
-    <h2>المستويات</h2>
+    <button class="icon-btn" data-back>←</button>
+    <h2>Levels</h2>
     <span class="spacer"></span>
   </header>
   <div id="levelGrid" class="level-grid"></div>
 </section>
 
-<!-- طريقة اللعب -->
+<!-- Help -->
 <section id="help" class="screen">
   <header class="bar">
-    <button class="icon-btn" data-back>→</button>
-    <h2>طريقة اللعب</h2>
+    <button class="icon-btn" data-back>←</button>
+    <h2>How to play</h2>
     <span class="spacer"></span>
   </header>
   <div class="help-body">
-    <p>🧩 فوق كل <b>عمود</b> صورة تدل على الكلمة العمودية، وفي بداية كل <b>سطر</b> صورة أو كلمة مرادفة للكلمة الأفقية. الرقم الصغير هو عدد حروف الكلمة.</p>
-    <p>🔤 في كل دور تحصل على مجموعة <b>حروف</b>. اضغط على حرف ثم على المربع المناسب لوضعه (أو المربع أولاً ثم الحرف).</p>
-    <p>✅ الحرف الصحيح = <b>نقطة</b>. عند اكتمال كلمة يحصل من وضع أكثر حروفها على نقاط إضافية بعدد حروفها.</p>
-    <p>❌ الحرف الخاطئ يخصم نقطة <b>وينهي دورك</b>.</p>
-    <p>⏭️ زر <b>باص</b>: تتخطى دورك وتحصل على حروف جديدة. بعد وضع حرف واحد على الأقل يصبح الزر <b>إنهاء الدور</b>.</p>
-    <p>🤖 بعدها يلعب الكمبيوتر دوره. اجمع نقاطاً أكثر منه لتفوز وتفتح المستوى التالي.</p>
-    <p>🆘 وسائل المساعدة:<br>
-      💡 <b>كشف حرف</b>: اختر مربعاً ليظهر حرفه الصحيح.<br>
-      🎯 <b>تلميح</b>: يضيء لك حرفاً من حروفك والمربع الذي يناسبه.</p>
-    <p>📈 كلما تقدمت تكبر الشبكة، وتصبح الكلمات أطول وأصعب، وتتحول الصور إلى مرادفات، ويصبح الكمبيوتر أذكى.</p>
-    <p>⭐ النجوم: الفوز = نجمة، ونجمة إضافية إذا فزت بفارق 5 نقاط أو أكثر، ونجمة ثالثة إذا لم تستخدم وسائل المساعدة.</p>
+    <p>🧩 Above every <b>column</b> and at the start of every <b>row</b> there is a clue: a <b>picture</b> or a <b>word</b> (a synonym). The small number is the word's length. Tap a clue to highlight its word.</p>
+    <p>🔤 Each turn you get a set of <b>letters</b>. <b>Drag</b> a letter and drop it on the right square. (You can also tap a letter, then tap a square.)</p>
+    <p>✅ Correct letter = <b>1 point</b>. When a word is completed, whoever placed most of its letters gets bonus points equal to its length.</p>
+    <p>❌ A wrong letter costs 1 point <b>and ends your turn</b>.</p>
+    <p>⏭️ <b>Pass</b> skips your turn and gives you new letters. After you place at least one letter, the button becomes <b>End turn</b>.</p>
+    <p>🤖 Then the computer plays. Score more than the computer to win and unlock the next level.</p>
+    <p>🆘 Helpers:<br>
+      💡 <b>Reveal</b>: pick a square to show its letter.<br>
+      🎯 <b>Hint</b>: lights up one of your letters and the square it belongs to.</p>
+    <p>📈 As you progress the grid grows, the words get longer and harder, more clues become words instead of pictures, and the computer gets smarter.</p>
+    <p>⭐ Stars: a win = 1 star, +1 star for winning by 5 or more, +1 star for using no helpers.</p>
   </div>
 </section>
 
-<!-- اللعبة -->
+<!-- Game -->
 <section id="game" class="screen">
   <header class="bar game-bar">
     <button class="icon-btn" id="btnMenu">☰</button>
     <div class="score-box" id="scoreP">
-      <span class="who">🙂 أنت</span><span class="pts" id="ptsP">0</span>
+      <span class="who">🙂 You</span><span class="pts" id="ptsP">0</span>
     </div>
-    <div class="level-tag" id="levelTag">مستوى 1</div>
+    <div class="level-tag" id="levelTag">Level 1</div>
     <div class="score-box cpu" id="scoreC">
-      <span class="who">🤖 الكمبيوتر</span><span class="pts" id="ptsC">0</span>
+      <span class="who">🤖 Computer</span><span class="pts" id="ptsC">0</span>
     </div>
   </header>
 
   <div class="status-row">
-    <div class="status" id="status">دورك</div>
+    <div class="status" id="status">Your turn</div>
     <span class="bag" id="bagCount">🎒 0</span>
   </div>
 
   <div class="board-wrap">
-    <div id="board" class="board" dir="rtl"></div>
+    <div id="board" class="board" dir="ltr"></div>
   </div>
 
   <div class="clue-info" id="clueInfo"></div>
 
   <div class="rack-area">
-    <div class="rack-label">حروفك</div>
+    <div class="rack-label">Your letters – drag them onto the board</div>
     <div id="rack" class="rack"></div>
   </div>
 
   <div class="actions">
-    <button class="act" id="aidReveal"><span class="ic">💡</span><span>كشف حرف</span><b class="cnt" id="cntReveal">2</b></button>
-    <button class="act" id="aidHint"><span class="ic">🎯</span><span>تلميح</span><b class="cnt" id="cntHint">2</b></button>
-    <button class="act pass" id="btnPass"><span class="ic">⏭️</span><span id="passLabel">باص</span></button>
+    <button class="act" id="aidReveal"><span class="ic">💡</span><span>Reveal</span><b class="cnt" id="cntReveal">2</b></button>
+    <button class="act" id="aidHint"><span class="ic">🎯</span><span>Hint</span><b class="cnt" id="cntHint">2</b></button>
+    <button class="act pass" id="btnPass"><span class="ic">⏭️</span><span id="passLabel">Pass</span></button>
   </div>
 
   <div class="toast" id="toast"></div>
 </section>
 
-<!-- نافذة -->
+<!-- Modal -->
 <div class="modal" id="modal">
   <div class="card">
     <div class="m-emoji" id="mEmoji">🏆</div>
-    <h3 id="mTitle">فزت!</h3>
+    <h3 id="mTitle">You win!</h3>
     <div class="stars" id="mStars"></div>
     <p id="mText"></p>
     <div class="m-btns" id="mBtns"></div>

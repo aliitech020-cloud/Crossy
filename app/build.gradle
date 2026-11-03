@@ -16,7 +16,7 @@ android {
 
     signingConfigs {
         release {
-            // مفتاح توقيع ثابت حتى تتمكن من تحديث اللعبة فوق النسخة القديمة
+            // fixed signing key so new versions install over old ones
             storeFile file("crossy.keystore")
             storePassword "crossy2026"
             keyAlias "crossy"

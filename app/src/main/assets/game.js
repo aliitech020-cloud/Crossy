@@ -3,10 +3,10 @@
 
   var $ = function (id) { return document.getElementById(id); };
   var MAX_LEVEL = Puzzle.MAX_LEVEL;
-  var STORE = 'crossy.v1';
-  var DISTRACT = 'اابتثجحخدذررزسشصضطظعغفقككللمنهوويية';
+  var STORE = 'crossy.en.v1';
+  var DISTRACT = 'EEEEEAAAAIIIOOONNNRRRTTTSSSLLDDUCMPHGBFYWKV';
 
-  // ---------------- التخزين ----------------
+  // ---------------- storage ----------------
   function loadStore() {
     try {
       var s = JSON.parse(localStorage.getItem(STORE));
@@ -17,7 +17,7 @@
   var store = loadStore();
   function save() { try { localStorage.setItem(STORE, JSON.stringify(store)); } catch (e) { /* ignore */ } }
 
-  // ---------------- الأصوات ----------------
+  // ---------------- sounds ----------------
   var actx = null;
   function tone(freqs, dur, type) {
     if (!store.sound) return;
@@ -47,7 +47,7 @@
     lose: function () { tone([392, 330, 262], 0.2, 'sawtooth'); }
   };
 
-  // ---------------- أدوات ----------------
+  // ---------------- utils ----------------
   function shuffle(a) {
     for (var i = a.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
@@ -73,7 +73,7 @@
     toastTimer = setTimeout(function () { t.classList.remove('show'); }, ms || 1800);
   }
 
-  // ---------------- الشاشات ----------------
+  // ---------------- screens ----------------
   var current = 'home';
   function show(id) {
     document.querySelectorAll('.screen').forEach(function (s) { s.classList.toggle('active', s.id === id); });
@@ -92,7 +92,7 @@
       b.innerHTML = (locked ? '🔒' : L) + '<small>' + (store.stars[L] ? starsText(store.stars[L]) : '') + '</small>';
       (function (lv, lk) {
         b.onclick = function () {
-          if (lk) { toast('أكمل المستويات السابقة أولاً 🔒'); return; }
+          if (lk) { toast('Finish the previous levels first 🔒'); return; }
           SFX.click();
           startLevel(lv);
         };
@@ -103,7 +103,7 @@
     if (cur) setTimeout(function () { cur.scrollIntoView({ block: 'center' }); }, 30);
   }
 
-  // ---------------- النافذة ----------------
+  // ---------------- modal ----------------
   function showModal(o) {
     $('mEmoji').textContent = o.emoji || '';
     $('mTitle').textContent = o.title || '';
@@ -132,7 +132,7 @@
   function closeModal() { $('modal').classList.remove('show'); }
   function modalOpen() { return $('modal').classList.contains('show'); }
 
-  // ---------------- حالة اللعبة ----------------
+  // ---------------- game state ----------------
   var G = null;
 
   function startLevel(level) {
@@ -160,7 +160,7 @@
     show('game');
     renderAll();
     setStatus();
-    toast('المستوى ' + level + ' – ابدأ أنت!');
+    toast('Level ' + level + ' – you start!');
   }
 
   function eachCell(fn) {
@@ -193,7 +193,7 @@
     return f / cs.length;
   }
 
-  // ---------------- الرسم ----------------
+  // ---------------- rendering ----------------
   function buildBoard() {
     var b = $('board'), R = G.pz.rows, C = G.pz.cols;
     b.innerHTML = '';
@@ -212,6 +212,8 @@
         var el = document.createElement('div');
         var cell = G.cells[r][c];
         el.className = 'cell ' + (cell ? 'open' : 'block');
+        el.dataset.r = r;
+        el.dataset.c = c;
         if (cell) {
           (function (rr, cc) { el.onclick = function () { onCell(rr, cc); }; })(r, c);
         }
@@ -253,6 +255,22 @@
     var s = Math.floor(Math.min((W - gap * (C - 1)) / C, (H - gap * (R - 1)) / R, 62));
     s = Math.max(s, 24);
     document.documentElement.style.setProperty('--cellsize', s + 'px');
+    fitClues(s);
+  }
+
+  // shrink each text clue until it fits its square without splitting words
+  function fitClues(cell) {
+    G.words.forEach(function (w) {
+      if (!w.el || w.mode !== 'text') return;
+      var span = w.el.firstChild;
+      var size = cell * 0.3;
+      span.style.fontSize = size + 'px';
+      var maxW = cell - 4, maxH = cell - 4;
+      while (size > 7 && (span.scrollWidth > maxW || span.offsetHeight > maxH)) {
+        size -= 0.5;
+        span.style.fontSize = size + 'px';
+      }
+    });
   }
   window.addEventListener('resize', layout);
 
@@ -300,7 +318,7 @@
       if (G.turn !== 'p' || G.over) cls += ' disabled';
       b.className = cls;
       b.textContent = t.ch;
-      b.onclick = function () { onTile(i); };
+      b.addEventListener('pointerdown', function (e) { tileDown(e, i); });
       rk.appendChild(b);
     });
     $('bagCount').textContent = '🎒 ' + G.bag.length;
@@ -311,7 +329,7 @@
     $('ptsC').textContent = G.score.c;
     $('scoreP').classList.toggle('turn', G.turn === 'p' && !G.over);
     $('scoreC').classList.toggle('turn', G.turn === 'c' && !G.over);
-    $('levelTag').textContent = 'مستوى ' + G.level;
+    $('levelTag').textContent = 'Level ' + G.level;
   }
 
   function renderActions() {
@@ -325,7 +343,7 @@
     var end = G.placed > 0;
     $('btnPass').classList.toggle('end', end);
     $('btnPass').querySelector('.ic').textContent = end ? '✅' : '⏭️';
-    $('passLabel').textContent = end ? 'إنهاء الدور' : 'باص';
+    $('passLabel').textContent = end ? 'End turn' : 'Pass';
   }
 
   function bump(who) {
@@ -337,17 +355,17 @@
 
   function setStatus(msg) {
     if (msg) { $('status').textContent = msg; return; }
-    if (G.over) $('status').textContent = 'انتهت الجولة';
-    else if (G.turn === 'c') $('status').textContent = '🤖 دور الكمبيوتر...';
-    else if (G.mode === 'reveal') $('status').textContent = '💡 اختر مربعاً فارغاً لكشف حرفه';
-    else $('status').textContent = '🙂 دورك: اختر حرفاً ثم مربعاً';
+    if (G.over) $('status').textContent = 'Round over';
+    else if (G.turn === 'c') $('status').textContent = '🤖 Computer is playing...';
+    else if (G.mode === 'reveal') $('status').textContent = '💡 Tap an empty square to reveal it';
+    else $('status').textContent = '🙂 Your turn – drag a letter';
   }
 
   function clueLabel(wi) {
     var w = G.words[wi];
-    var d = w.dir === 'a' ? 'أفقي' : 'عمودي';
-    var c = w.mode === 'text' ? '«<b>' + w.clue + '</b>»' : '<b style="font-size:20px">' + w.emoji + '</b>';
-    return d + ': ' + c + ' – ' + w.letters.length + ' حروف' + (w.done ? ' ✔' : '');
+    var d = w.dir === 'a' ? 'Across' : 'Down';
+    var c = w.mode === 'text' ? '“<b>' + w.clue + '</b>”' : '<b style="font-size:20px">' + w.emoji + '</b>';
+    return d + ': ' + c + ' – ' + w.letters.length + ' letters' + (w.done ? ' ✔' : '');
   }
 
   function selectWords(list) {
@@ -356,7 +374,7 @@
     renderBoard();
   }
 
-  // ---------------- تفاعل اللاعب ----------------
+  // ---------------- player input ----------------
   function onCell(r, c) {
     if (!G || G.over) return;
     var cell = G.cells[r][c];
@@ -393,7 +411,7 @@
       var w = G.words[wi];
       w.done = true;
       wordCells(wi).forEach(function (rc) { flash(rc[0], rc[1], 'win', 650); });
-      // مكافأة الكلمة لمن وضع أكثر حروفها (وعند التعادل لمن أكملها)
+      // word bonus goes to whoever placed most of its letters (tie: whoever completed it)
       var np = 0, nc = 0;
       wordCells(wi).forEach(function (rc) {
         var o = G.cells[rc[0]][rc[1]].owner;
@@ -403,9 +421,9 @@
       if (to) {
         addScore(to, w.letters.length);
         got += w.letters.length;
-        toast('اكتملت «' + w.text + '» ' + (to === 'p' ? '👏 +' + w.letters.length + ' لك' : '🤖 +' + w.letters.length + ' للكمبيوتر'));
+        toast(w.text + ' complete! ' + (to === 'p' ? '👏 +' + w.letters.length + ' for you' : '🤖 +' + w.letters.length + ' for the computer'));
       } else {
-        toast('اكتملت كلمة «' + w.text + '»');
+        toast(w.text + ' complete!');
       }
       SFX.word();
     });
@@ -442,7 +460,7 @@
       el._temp = t.ch;
       flash(r, c, 'wrong', 850);
       renderRack(); renderActions();
-      toast('❌ حرف خاطئ! خسرت نقطة وانتهى دورك');
+      toast('❌ Wrong letter! −1 point, your turn is over');
       later(function () {
         el._temp = '';
         G.busy = false;
@@ -466,7 +484,7 @@
 
   function checkStall() {
     if (G.passes >= 10) {
-      toast('لا أحد يستطيع اللعب – انتهت الجولة');
+      toast('Nobody can move – round over');
       later(finish, 1200);
       G.over = true;
       return true;
@@ -478,12 +496,12 @@
     if (!G || G.turn !== 'p' || G.busy || G.over) return;
     SFX.click();
     if (G.placed > 0) { endPlayerTurn(); return; }
-    // باص: تخطي الدور مع تبديل الحروف
+    // pass: skip the turn and swap letters
     var old = G.rackP;
     G.rackP = [];
     refill(G.rackP);
     old.forEach(function (t) { returnToBag(t.ch); });
-    toast('⏭️ باص! تم تخطي دورك وحصلت على حروف جديدة');
+    toast('⏭️ Pass! You skipped your turn and got new letters');
     endPlayerTurn();
   }
 
@@ -493,7 +511,7 @@
     if (G.selCell) { doReveal(G.selCell.r, G.selCell.c); return; }
     G.mode = G.mode === 'reveal' ? null : 'reveal';
     G.selTile = -1;
-    if (G.mode) toast('💡 اختر مربعاً فارغاً');
+    if (G.mode) toast('💡 Tap an empty square');
     setStatus(); renderAll();
   }
 
@@ -526,7 +544,7 @@
       eachCell(function (cell, r, c) { if (!cell.owner && cell.letter === t.ch) pairs.push({ ti: ti, tile: t.id, r: r, c: c }); });
     });
     if (!pairs.length) {
-      toast('لا يوجد بين حروفك حرف مناسب الآن – جرّب الباص لتغيير حروفك', 2600);
+      toast('None of your letters fit right now – try Pass to get new ones', 2600);
       return;
     }
     var pk = pairs[Math.floor(Math.random() * pairs.length)];
@@ -535,11 +553,72 @@
     G.selTile = pk.ti; G.selCell = null; G.mode = null;
     var cell = G.cells[pk.r][pk.c];
     selectWords([cell.a, cell.d].filter(function (x) { return x >= 0; }));
-    toast('🎯 ضع الحرف المضيء في المربع المضيء');
+    toast('🎯 Drag the glowing letter to the glowing square');
     renderAll();
   }
 
-  // ---------------- دور الكمبيوتر ----------------
+  // ---------------- drag & drop ----------------
+  var drag = null;
+  function canPlay() { return !!G && G.turn === 'p' && !G.busy && !G.over; }
+
+  function tileDown(e, i) {
+    if (!canPlay() || drag) return;
+    if (e.button !== undefined && e.button > 0) return;
+    e.preventDefault();
+    drag = { i: i, x0: e.clientX, y0: e.clientY, src: e.currentTarget, ghost: null, target: null, id: e.pointerId };
+  }
+
+  function cellFromPoint(x, y) {
+    var el = document.elementFromPoint(x, y);
+    var ce = el && el.closest ? el.closest('.cell.open') : null;
+    if (!ce) return null;
+    var r = +ce.dataset.r, c = +ce.dataset.c;
+    if (!G.cells[r] || !G.cells[r][c] || G.cells[r][c].owner) return null;
+    return { r: r, c: c, el: ce };
+  }
+
+  function setDropTarget(t) {
+    if (drag.target && (!t || drag.target.el !== t.el)) drag.target.el.classList.remove('drop');
+    if (t) t.el.classList.add('drop');
+    drag.target = t;
+  }
+
+  window.addEventListener('pointermove', function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+    if (!drag.ghost) {
+      if (dx * dx + dy * dy < 64) return;
+      var g = document.createElement('div');
+      g.className = 'tile drag-ghost';
+      g.textContent = G.rackP[drag.i].ch;
+      document.body.appendChild(g);
+      drag.ghost = g;
+      drag.src.classList.add('dragging');
+      G.selTile = -1; G.selCell = null;
+      if (G.mode) { G.mode = null; setStatus(); renderActions(); }
+      renderBoard();
+    }
+    // the tile floats a little above the finger so you can see where it lands
+    var gx = e.clientX, gy = e.clientY - 44;
+    drag.ghost.style.transform = 'translate(' + (gx - 25) + 'px,' + (gy - 28) + 'px) scale(1.12)';
+    setDropTarget(cellFromPoint(gx, gy));
+  });
+
+  function endDrag(e, cancel) {
+    if (!drag || (e && e.pointerId !== drag.id)) return;
+    var d = drag;
+    drag = null;
+    if (d.target) d.target.el.classList.remove('drop');
+    d.src.classList.remove('dragging');
+    if (!d.ghost) { if (!cancel) onTile(d.i); return; }
+    d.ghost.remove();
+    if (!cancel && d.target && canPlay()) place(d.i, d.target.r, d.target.c);
+    else if (G) renderRack();
+  }
+  window.addEventListener('pointerup', function (e) { endDrag(e, false); });
+  window.addEventListener('pointercancel', function (e) { endDrag(e, true); });
+
+  // ---------------- computer turn ----------------
   function cpuKnowsCell(cell) {
     return [cell.a, cell.d].some(function (wi) {
       return wi >= 0 && (G.cpuKnows[wi] || fillRatio(wi) >= 0.6);
@@ -551,7 +630,7 @@
     var me = G;
     G.busy = true;
     renderActions();
-    // كلما طال التوقف يتعلّم الكمبيوتر أسرع حتى لا تتجمد اللعبة
+    // the longer nobody moves, the faster the computer learns (prevents stalls)
     var learn = G.p.cpuLearn + 0.2 * G.passes;
     G.words.forEach(function (w, i) { if (!G.cpuKnows[i] && Math.random() < learn) G.cpuKnows[i] = true; });
 
@@ -607,18 +686,18 @@
           flash(m.r, m.c, 'wrong', 800);
           SFX.wrong();
           addScore('c', -1);
-          toast('🤖 أخطأ الكمبيوتر! خسر نقطة');
+          toast('🤖 The computer made a mistake! −1 point');
           later(function () { el._temp = ''; renderBoard(); cpuEnd(true); }, 900);
         }
       }, 450);
     }
     if (!moves.length) {
-      // باص الكمبيوتر مع تبديل حروفه
+      // computer passes and swaps its letters
       var old = G.rackC;
       G.rackC = [];
       refill(G.rackC);
       old.forEach(function (t) { returnToBag(t.ch); });
-      toast('🤖 الكمبيوتر قال: باص');
+      toast('🤖 The computer passed');
       later(function () { if (G === me) cpuEnd(false); }, 900);
     } else {
       later(next, 300);
@@ -636,13 +715,13 @@
     setStatus();
   }
 
-  // ---------------- النهاية ----------------
+  // ---------------- end of round ----------------
   function finish() {
     if (!G) return;
     G.over = true;
     G.busy = false;
     var me = G;
-    // إظهار الحروف المتبقية
+    // reveal the remaining letters
     eachCell(function (cell) { if (!cell.owner) cell.owner = 'h'; });
     renderAll();
     setStatus();
@@ -656,22 +735,22 @@
         save();
         SFX.win();
         var btns = [];
-        if (L < MAX_LEVEL) btns.push({ label: '⏭️ المستوى التالي', primary: true, fn: function () { startLevel(L + 1); } });
-        btns.push({ label: '🔁 إعادة المستوى', fn: function () { startLevel(L); } });
-        btns.push({ label: '🗺️ المستويات', fn: function () { show('levels'); } });
+        if (L < MAX_LEVEL) btns.push({ label: '⏭️ Next level', primary: true, fn: function () { startLevel(L + 1); } });
+        btns.push({ label: '🔁 Replay level', fn: function () { startLevel(L); } });
+        btns.push({ label: '🗺️ Levels', fn: function () { show('levels'); } });
         showModal({
-          emoji: L >= MAX_LEVEL ? '👑' : '🏆', title: 'فزت!', stars: stars,
-          text: 'أنت <b>' + ps + '</b> – <b>' + cs + '</b> الكمبيوتر' + (L >= MAX_LEVEL ? '<br>أنهيت كل المستويات! 🎉' : ''),
+          emoji: L >= MAX_LEVEL ? '👑' : '🏆', title: 'You win!', stars: stars,
+          text: 'You <b>' + ps + '</b> – <b>' + cs + '</b> Computer' + (L >= MAX_LEVEL ? '<br>You finished every level! 🎉' : ''),
           buttons: btns
         });
       } else {
         SFX.lose();
         showModal({
-          emoji: ps === cs ? '🤝' : '😢', title: ps === cs ? 'تعادل' : 'فاز الكمبيوتر',
-          text: 'أنت <b>' + ps + '</b> – <b>' + cs + '</b> الكمبيوتر<br>يجب أن تتفوق على الكمبيوتر لفتح المستوى التالي',
+          emoji: ps === cs ? '🤝' : '😢', title: ps === cs ? 'Draw' : 'Computer wins',
+          text: 'You <b>' + ps + '</b> – <b>' + cs + '</b> Computer<br>Beat the computer to unlock the next level',
           buttons: [
-            { label: '🔁 حاول مجدداً', primary: true, fn: function () { startLevel(L); } },
-            { label: '🗺️ المستويات', fn: function () { show('levels'); } }
+            { label: '🔁 Try again', primary: true, fn: function () { startLevel(L); } },
+            { label: '🗺️ Levels', fn: function () { show('levels'); } }
           ]
         });
       }
@@ -682,18 +761,18 @@
     if (!G) { show('home'); return; }
     var L = G.level;
     showModal({
-      emoji: '⏸️', title: 'إيقاف مؤقت',
+      emoji: '⏸️', title: 'Paused',
       buttons: [
-        { label: '▶ متابعة', primary: true, fn: function () {} },
-        { label: '🔁 إعادة المستوى', fn: function () { startLevel(L); } },
-        { label: '🗺️ المستويات', fn: function () { G = null; show('levels'); } },
-        { label: '🏠 الرئيسية', fn: function () { G = null; show('home'); } }
+        { label: '▶ Resume', primary: true, fn: function () {} },
+        { label: '🔁 Replay level', fn: function () { startLevel(L); } },
+        { label: '🗺️ Levels', fn: function () { G = null; show('levels'); } },
+        { label: '🏠 Home', fn: function () { G = null; show('home'); } }
       ]
     });
   }
 
-  // ---------------- الأزرار ----------------
-  function soundLabel() { $('btnSound').textContent = store.sound ? '🔊 الصوت: يعمل' : '🔇 الصوت: متوقف'; }
+  // ---------------- buttons ----------------
+  function soundLabel() { $('btnSound').textContent = store.sound ? '🔊 Sound: on' : '🔇 Sound: off'; }
   $('btnPlay').onclick = function () { SFX.click(); startLevel(Math.min(store.unlocked, MAX_LEVEL)); };
   $('btnLevels').onclick = function () { SFX.click(); show('levels'); };
   $('btnHelp').onclick = function () { SFX.click(); show('help'); };
@@ -705,7 +784,7 @@
   $('aidHint').onclick = onHint;
   soundLabel();
 
-  // زر الرجوع في أندرويد
+  // Android back button
   window.androidBack = function () {
     if (modalOpen()) {
       if (G && !G.over) closeModal();
@@ -717,6 +796,6 @@
     return false;
   };
 
-  // للاختبار
+  // test hooks
   window.__crossy = { get state() { return G; }, startLevel: startLevel, store: store, setSpeed: function (x) { SPEED = x; } };
 })();

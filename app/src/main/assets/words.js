@@ -1,307 +1,377 @@
-// قاعدة الكلمات: الكلمة | الصورة (إيموجي) | مرادف أو وصف قصير | المستوى (1 سهل، 2 متوسط، 3 صعب)
-// الكلمات بدون صورة تُستخدم أفقياً فقط مع مرادف نصي.
+// Word database: WORD | emoji picture (optional) | synonym / short clue | tier (1 easy, 2 medium, 3 hard)
+// Every word can be shown with its picture or its text clue, in a row or a column.
+// Words without a picture always use the text clue.
 var WORD_DATA = `
-قطة|🐱|هرة|1
-كلب|🐶|ينبح|1
-أسد|🦁|ليث|1
-فيل|🐘|ذو خرطوم|1
-بيت|🏠|منزل|1
-شمس|☀️|نجم النهار|1
-قمر|🌕|بدر|1
-هلال|🌙|قمر صغير|2
-نجم|⭐|كوكب|1
-وردة|🌹|زهرة|1
-كتاب|📖|سِفر|1
-قلم|✏️|يراع|1
-باب|🚪|مدخل|1
-سمك|🐟|نون|1
-بطة|🦆|طائر يسبح|1
-تفاح|🍎|فاكهة حمراء|1
-موز|🍌|فاكهة صفراء|1
-عنب|🍇|منه الزبيب|1
-بحر|🌊|يمّ|1
-جبل|⛰️|طود|1
-شجرة|🌳|دوحة|1
-نار|🔥|لهب|1
-ماء|💧|سائل الحياة|1
-قلب|❤️|فؤاد|1
-عين|👁️|مُقلة|1
-سيارة|🚗|مركبة|1
-قطار|🚆|يسير على سكة|1
-طائرة|✈️|تحلّق|1
-ساعة|⌚|تقيس الوقت|1
-مفتاح|🔑|يفتح القفل|1
-كرة|⚽|تُركل|1
-جرس|🔔|ناقوس|1
-مطر|🌧️|غيث|1
-ثلج|❄️|جليد|1
-خبز|🍞|عيش|1
-حليب|🥛|لبن|1
-بيض|🥚|تضعه الدجاجة|1
-جزر|🥕|خضار برتقالي|1
-ليمون|🍋|حامض|1
-نحلة|🐝|تصنع العسل|1
-فراشة|🦋|ملوّنة الجناح|1
-حصان|🐴|جواد|1
-جمل|🐫|بعير|1
-بقرة|🐄|تعطي الحليب|1
-خروف|🐑|حمَل|1
-ديك|🐓|يصيح فجراً|1
-أرنب|🐰|طويل الأذنين|1
-فأر|🐭|جُرَذ|1
-ذئب|🐺|يعوي|1
-ثعلب|🦊|الماكر|1
-نمر|🐯|مفترس مخطط|1
-قرد|🐒|يحب الموز|1
-زرافة|🦒|طويلة العنق|1
-تمساح|🐊|زاحف نهري|2
-سلحفاة|🐢|بطيئة الخطى|2
-ثعبان|🐍|أفعى|1
-حوت|🐋|عملاق البحر|1
-دلفين|🐬|ذكي البحر|1
-نملة|🐜|مجتهدة|1
-عنكبوت|🕷️|ينسج بيته|2
-نسر|🦅|طائر جارح|1
-بومة|🦉|تسهر ليلاً|1
-حمامة|🕊️|رمز السلام|1
-ببغاء|🦜|يقلّد الكلام|2
-طاووس|🦚|ذيل ملوّن|2
-بطريق|🐧|طائر القطب|2
-فطر|🍄|عيش الغراب|2
-ذرة|🌽|حبوب صفراء|1
-فلفل|🌶️|حار|1
-بطيخ|🍉|فاكهة الصيف|1
-فراولة|🍓|توت أحمر|1
-كرز|🍒|حب الملوك|2
-خوخ|🍑|درّاق|2
-أناناس|🍍|فاكهة استوائية|2
-عسل|🍯|شهد|1
-جبن|🧀|من الحليب|1
-لحم|🥩|طعام أحمر|1
-كعكة|🎂|حلوى العيد|1
-حلوى|🍬|سكاكر|1
-شاي|🍵|مشروب ساخن|1
-قهوة|☕|بُنّ|1
-سكين|🔪|مُدية|1
-ملعقة|🥄|أداة الأكل|1
-كأس|🏆|جائزة|1
-هاتف|📱|جوّال|1
-حاسوب|💻|كمبيوتر|2
-تلفاز|📺|شاشة|1
-مصباح|💡|سراج|1
-شمعة|🕯️|تذوب وتضيء|1
-سرير|🛏️|فراش|1
-مظلة|☂️|شمسية|1
-حقيبة|👜|شنطة|1
-قميص|👕|ثوب|1
-حذاء|👞|نعل|1
-قبعة|🎩|طاقية|1
-نظارة|👓|عوينات|1
-خاتم|💍|حلية الإصبع|1
-تاج|👑|إكليل|1
-سيف|🗡️|حُسام|1
-درع|🛡️|واقٍ|2
-صاروخ|🚀|مركبة فضاء|1
-سفينة|🚢|مَركب|1
-دراجة|🚲|عجلة|1
-حافلة|🚌|باص|1
-جسر|🌉|قنطرة|2
-خيمة|⛺|بيت الشَّعر|1
-قلعة|🏰|حصن|1
-مسجد|🕌|جامع|1
-مدرسة|🏫|دار العلم|1
-بركان|🌋|حِمَم|2
-صحراء|🏜️|بادية|2
-جزيرة|🏝️|يحيطها الماء|2
-سحابة|☁️|غيمة|1
-برق|⚡|وميض|1
-رياح|💨|نسيم|2
-أرض|🌍|كوكبنا|1
-طبل|🥁|إيقاع|1
-جيتار|🎸|آلة وترية|2
-كمان|🎻|كمنجة|2
-بوق|🎺|نفير|2
-لوحة|🖼️|رسمة|1
-مقص|✂️|أداة قص|1
-مطرقة|🔨|شاكوش|1
-قفل|🔒|يُغلق الباب|1
-رسالة|✉️|مكتوب|1
-هدية|🎁|عطيّة|1
-بالون|🎈|منطاد صغير|1
-علم|🚩|راية|1
-دواء|💊|علاج|1
-ضرس|🦷|سِن|2
-أذن|👂|للسمع|1
-أنف|👃|للشم|1
-دماغ|🧠|مُخ|2
-طفل|👶|رضيع|1
-ملك|🤴|سلطان|1
-ملكة|👸|زوجة الملك|1
-شرطي|👮|رجل الأمن|1
-ضفدع|🐸|ينقنق|2
-حلزون|🐌|بطيء|2
-خفاش|🦇|يطير ليلاً|2
-قنفذ|🦔|كثير الأشواك|2
-كنغر|🦘|يقفز بجرابه|2
-غزال|🦌|ظبي|1
-دجاجة|🐔|تبيض|1
-سنجاب|🐿️|يحب البندق|2
-أخطبوط|🐙|ثمانية أذرع|2
-سرطان|🦀|سلطعون|2
-نخلة|🌴|تُثمر التمر|1
-صبار|🌵|نبتة صحراوية|2
-زهرة|🌼|وردة|1
-مكنسة|🧹|أداة تنظيف|2
-صابون|🧼|للغسل|1
-كرسي|💺|مقعد|1
-قارب|⛵|زورق|1
-بيتزا|🍕|فطيرة إيطالية|1
-قوس|🏹|رمي السهام|2
-ساحر|🧙|مشعوذ|2
-شبح|👻|طيف|2
-روبوت|🤖|إنسان آلي|1
-مهرج|🤡|يُضحك الناس|2
-ماعز|🐐|عنزة|2
-بعوضة|🦟|تلسع ليلاً|2
-عقرب|🦂|لاسع|2
-بوصلة|🧭|تحدد الاتجاه|2
-خريطة|🗺️|أطلس|2
-ميزان|⚖️|أداة الوزن|2
-مجهر|🔬|ميكروسكوب|2
-منظار|🔭|تلسكوب|2
-مغناطيس|🧲|يجذب الحديد|2
-شطرنج|♟️|لعبة الملوك|2
-فانوس|🏮|قنديل|2
-بطاطا|🥔|بطاطس|1
-طماطم|🍅|بندورة|1
-خيار|🥒|قِثّاء|1
-كمثرى|🍐|إجاص|2
-برتقال|🍊|فاكهة حمضية|1
-جوارب|🧦|شُرّاب|2
-فستان|👗|رداء|1
-إسعاف|🚑|سيارة طوارئ|2
-مروحية|🚁|هليكوبتر|2
-جرار|🚜|آلة زراعية|2
-زجاجة|🍾|قارورة|2
-قرش|🦈|سمك مفترس|1
-لسان|👅|للتذوق|1
-قدم|🦶|رِجل|1
-ذراع|💪|ساعِد|1
-إصبع|👆|بَنان|2
-بيانو|🎹|آلة موسيقية|2
-كاميرا|📷|آلة تصوير|1
-كتب|📚|مؤلفات|1
-جائزة|🥇|ميدالية|2
-عصفور|🐦|طائر صغير|1
-وحش|👾|مخلوق مخيف|2
-سلة|🧺|وعاء خوص|2
-خيط|🧵|للخياطة|2
-دبوس|📌|إبرة التثبيت|2
-ورقة|📄|صفحة|1
-تنين|🐉|مخلوق أسطوري|2
-ديناصور|🦖|زاحف منقرض|2
-شجاع||مِقدام|2
-كريم||سخيّ|2
-سعيد||مسرور|2
-حزين||كئيب|2
-ذكي||فَطِن|2
-سريع||عاجل|2
-كبير||ضخم|2
-صغير||ضئيل|2
-جميل||وسيم|2
-قوي||شديد|2
-ضعيف||واهن|2
-صديق||رفيق|2
-عدو||خصم|2
-طريق||درب|2
-فرح||بهجة|2
-خوف||فزع|2
-غضب||سُخط|2
-نور||ضياء|2
-ظلام||عتمة|2
-بداية||مطلع|2
-نهاية||خاتمة|2
-عمل||شُغل|2
-مال||ثروة|2
-وطن||بلد|2
-سلام||أمان|2
-وقت||زمن|2
-عام||سنة|2
-يوم||نهار|2
-فجر||صُبح|2
-معلم||أستاذ|2
-طالب||تلميذ|2
-قصة||حكاية|2
-سوق||متجر|2
-نهر||جدول|2
-سماء||الجو|2
-تراب||ثرى|2
-غني||ثريّ|2
-فقير||مُعدِم|2
-نوم||رُقاد|2
-جوع||سَغَب|3
-عطش||ظمأ|3
-مرض||سَقَم|3
-صحة||عافية|2
-ضحك||قهقهة|3
-بكاء||نحيب|3
-ابتسامة||بسمة|3
-صبر||تحمّل|3
-حكمة||رُشد|3
-فكرة||خاطرة|3
-حلم||منام|3
-عهد||ميثاق|3
-نصر||ظفَر|3
-هدوء||سكينة|3
-عطاء||بذل|3
-جهد||كدّ|3
-قوة||بأس|3
-أمل||رجاء|3
-وفاء||إخلاص|3
-سؤال||استفهام|3
-جواب||ردّ|3
-كلام||حديث|3
-ليل||دُجى|3
-غروب||مغيب|3
-عاقل||رشيد|3
-قائد||زعيم|3
-فارس||خيّال|3
-بطل||مغوار|3
-شاعر||ناظم الشعر|3
-لغة||لسان|3
-مدينة||حاضرة|3
-قرية||بلدة|3
-وادي||شِعب|3
-ذهب||معدن نفيس|3
-فضة||لُجين|3
-حديد||معدن صلب|3
-كنز||ثروة مدفونة|3
-عيد||مناسبة سعيدة|3
-سهر||قلة النوم|3
-حرب||قتال|3
-سرعة||عجلة|3
-دقة||إتقان|3
-جمال||حُسن|3
-كرم||جود|3
-شجاعة||بسالة|3
-ذكاء||فطنة|3
-نشاط||حيوية|3
-كسل||خمول|3
-مطيع||ممتثل|3
-صادق||أمين|3
-كذب||افتراء|3
-رحلة||سفرة|3
-سفر||ترحال|3
-شتاء||فصل البرد|3
-صيف||فصل الحر|3
-ربيع||فصل الزهور|3
-خريف||فصل تساقط الأوراق|3
-بحيرة||ماء محصور|3
-غابة||أجمة|3
-مطبخ||مكان الطهي|3
-حديقة||بستان|3
-مكتبة||دار الكتب|3
-مصنع||معمل|3
+CAT|🐱|Kitty|1
+DOG|🐶|Barks|1
+LION|🦁|Big cat|1
+COW|🐄|Gives milk|1
+PIG|🐷|Hog|1
+HEN|🐔|Lays eggs|1
+OWL|🦉|Night bird|1
+BEE|🐝|Makes honey|1
+ANT|🐜|Tiny worker|1
+BAT|🦇|Flying mammal|1
+FOX|🦊|Sly animal|1
+BEAR|🐻|Grizzly|1
+WOLF|🐺|Howls|1
+FROG|🐸|Croaks|1
+FISH|🐟|Swims|1
+DUCK|🦆|Quacks|1
+GOAT|🐐|Billy|1
+SHEEP|🐑|Gives wool|1
+HORSE|🐴|Stallion|1
+MOUSE|🐭|Small rodent|1
+RABBIT|🐰|Bunny|1
+TIGER|🐯|Striped cat|1
+ZEBRA|🦓|Striped horse|1
+CAMEL|🐫|Humped animal|1
+SNAKE|🐍|Serpent|1
+WHALE|🐋|Sea giant|1
+SHARK|🦈|Jaws|1
+CRAB|🦀|Has pincers|1
+SNAIL|🐌|Slow mover|1
+EAGLE|🦅|Bird of prey|1
+DOVE|🕊️|Peace bird|2
+APPLE|🍎|Red fruit|1
+PEAR|🍐|Green fruit|1
+GRAPE|🍇|Vine fruit|1
+LEMON|🍋|Sour fruit|1
+MELON|🍈|Juicy fruit|2
+CHERRY|🍒|Small red fruit|1
+PEACH|🍑|Fuzzy fruit|1
+BANANA|🍌|Yellow fruit|1
+CORN|🌽|Maize|1
+CAKE|🎂|Birthday treat|1
+EGG|🥚|Hen's product|1
+MILK|🥛|Dairy drink|1
+BREAD|🍞|Loaf|1
+CHEESE|🧀|Cheddar|1
+PIZZA|🍕|Italian pie|1
+HONEY|🍯|Bee's sweet|1
+TEA|🍵|Hot brew|1
+SUN|☀️|Day star|1
+MOON|🌙|Night light|1
+STAR|⭐|Twinkler|1
+RAIN|🌧️|Showers|1
+SNOW|❄️|Flakes|1
+FIRE|🔥|Flames|1
+TREE|🌳|Oak or pine|1
+ROSE|🌹|Red flower|1
+LEAF|🍃|Foliage|1
+HOUSE|🏠|Home|1
+DOOR|🚪|Entrance|1
+KEY|🔑|Opens locks|1
+BOOK|📖|Novel|1
+PEN|🖊️|Writes in ink|1
+BELL|🔔|It rings|1
+BALL|⚽|Kicked round|1
+CAR|🚗|Auto|1
+BUS|🚌|Coach|1
+TRAIN|🚆|Runs on rails|1
+PLANE|✈️|Jet|1
+SHIP|🚢|Vessel|1
+BOAT|⛵|Sailboat|1
+BIKE|🚲|Bicycle|1
+ROCKET|🚀|Spacecraft|1
+CLOCK|⏰|Timepiece|1
+WATCH|⌚|Wrist clock|1
+PHONE|📱|Mobile|1
+BULB|💡|Light source|1
+CANDLE|🕯️|Wax light|1
+CROWN|👑|Royal hat|1
+RING|💍|Finger band|1
+HAT|🎩|Topper|1
+SHOE|👞|Footwear|1
+SHIRT|👕|Tee|1
+DRESS|👗|Gown|1
+SOCKS|🧦|Foot warmers|1
+BAG|👜|Purse|1
+GIFT|🎁|Present|1
+DRUM|🥁|Beat it|1
+HEART|❤️|Ticker|1
+EYE|👁️|Sees|1
+EAR|👂|Hears|1
+NOSE|👃|Smells|1
+HAND|✋|Has a palm|1
+FOOT|🦶|Has toes|1
+TOOTH|🦷|Molar|1
+BRAIN|🧠|Mind|1
+BABY|👶|Infant|1
+KING|🤴|Monarch|1
+QUEEN|👸|King's wife|1
+GHOST|👻|Spirit|1
+ROBOT|🤖|Machine man|1
+CLOWN|🤡|Circus joker|1
+WIZARD|🧙|Magician|2
+TENT|⛺|Camp shelter|1
+CASTLE|🏰|Fortress|1
+BRIDGE|🌉|Spans a river|1
+ISLAND|🏝️|Land in the sea|1
+DESERT|🏜️|Sahara|1
+VOLCANO|🌋|Erupts lava|2
+CLOUD|☁️|Sky fluff|1
+STORM|⛈️|Tempest|2
+WAVE|🌊|Surf|1
+MAP|🗺️|Atlas page|1
+SWORD|🗡️|Blade|1
+SHIELD|🛡️|Guard|1
+BOW|🏹|Archer's tool|1
+HAMMER|🔨|Mallet|1
+SCISSORS|✂️|Cutters|2
+LOCK|🔒|Padlock|1
+MAGNET|🧲|Attracts iron|2
+GUITAR|🎸|Six strings|1
+PIANO|🎹|Keyboard|1
+VIOLIN|🎻|Fiddle|2
+TRUMPET|🎺|Brass horn|2
+CAMERA|📷|Takes photos|1
+LAPTOP|💻|Computer|1
+PILL|💊|Tablet|1
+BONE|🦴|Skeleton part|1
+SKULL|💀|Head bone|2
+MASKS|🎭|Drama|2
+TROPHY|🏆|Award cup|1
+MEDAL|🥇|Gold prize|1
+DICE|🎲|Rolled cubes|1
+CHESS|♟️|Game of kings|2
+PUZZLE|🧩|Jigsaw|1
+BALLOON|🎈|Party float|1
+ANCHOR|⚓|Ship holder|2
+COMPASS|🧭|Shows north|2
+BROOM|🧹|Sweeper|1
+SOAP|🧼|Lather|1
+CHAIR|💺|Seat|1
+BED|🛏️|Cot|1
+UMBRELLA|☂️|Brolly|2
+TOMATO|🍅|Red veggie|1
+POTATO|🥔|Spud|1
+CARROT|🥕|Orange root|1
+CHILI|🌶️|Hot pepper|2
+MUSHROOM|🍄|Fungus|2
+CACTUS|🌵|Prickly plant|1
+PALM|🌴|Tropical tree|1
+FLOWER|🌼|Bloom|1
+PLANT|🌱|Sprout|1
+OCTOPUS|🐙|Eight arms|1
+SQUID|🦑|Inky swimmer|2
+SHRIMP|🦐|Prawn|2
+DOLPHIN|🐬|Smart swimmer|1
+TURTLE|🐢|Shelled reptile|1
+PARROT|🦜|Talking bird|1
+PEACOCK|🦚|Showy bird|2
+PENGUIN|🐧|Tuxedo bird|1
+GIRAFFE|🦒|Long neck|1
+ELEPHANT|🐘|Has a trunk|1
+MONKEY|🐒|Ape|1
+GORILLA|🦍|Big ape|2
+KOALA|🐨|Tree bear|1
+PANDA|🐼|Bamboo eater|1
+DEER|🦌|Doe or stag|1
+HEDGEHOG|🦔|Spiny critter|2
+KANGAROO|🦘|Hopping pouch|2
+SPIDER|🕷️|Web spinner|1
+SCORPION|🦂|Stinger|2
+DRAGON|🐉|Fire breather|1
+DINOSAUR|🦖|T-Rex|2
+UNICORN|🦄|Horned horse|1
+MOSQUITO|🦟|Biting bug|2
+LADYBUG|🐞|Spotted beetle|2
+COOKIE|🍪|Biscuit|1
+DONUT|🍩|Ring cake|1
+CANDY|🍬|Sweets|1
+BURGER|🍔|Bun meal|1
+TACO|🌮|Mexican shell|2
+SALAD|🥗|Greens|2
+SOUP|🍲|Broth|1
+RICE|🍚|Grain|1
+NOODLES|🍜|Ramen|2
+COFFEE|☕|Java|1
+BOTTLE|🍾|Flask|2
+SPOON|🥄|Stirrer|1
+FORK|🍴|Pronged tool|1
+KNIFE|🔪|Cutter|1
+PLATE|🍽️|Dish|1
+PAN|🍳|Skillet|2
+BASKET|🧺|Hamper|2
+LETTER|✉️|Mail|1
+PIN|📌|Tack|2
+PAPER|📄|Sheet|1
+PENCIL|✏️|Has lead|1
+CRAYON|🖍️|Wax color|2
+BRUSH|🖌️|Paint tool|2
+ART|🎨|Painting|1
+MUSIC|🎵|Melody|1
+HOSPITAL|🏥|Clinic|2
+SCHOOL|🏫|Academy|1
+MOSQUE|🕌|Masjid|1
+CHURCH|⛪|Chapel|2
+FACTORY|🏭|Plant|2
+STADIUM|🏟️|Arena|2
+TRUCK|🚚|Lorry|1
+TAXI|🚕|Cab|1
+TRACTOR|🚜|Farm vehicle|1
+POLICE|🚓|Cops|1
+SLED|🛷|Sleigh|2
+SKATE|⛸️|Ice shoe|2
+SKI|🎿|Snow glider|2
+TENNIS|🎾|Racket sport|1
+GOLF|⛳|Tee sport|2
+FOOTBALL|🏈|Gridiron|2
+FLAG|🚩|Banner|1
+TORCH|🔦|Flashlight|2
+BATTERY|🔋|Power cell|2
+PLUG|🔌|Socket fit|2
+GEAR|⚙️|Cog|2
+CHAIN|⛓️|Links|2
+SCREW|🔩|Bolt|2
+TOOLBOX|🧰|Tool kit|2
+BRICK|🧱|Wall block|2
+SNOWMAN|⛄|Frosty|1
+RAINBOW|🌈|Seven colors|1
+BOLT|⚡|Lightning|1
+COMET|☄️|Space rock|2
+EARTH|🌍|Our planet|1
+MOUNTAIN|⛰️|Peak|1
+HAPPY||Glad|2
+SAD||Unhappy|2
+ANGRY||Mad|2
+BRAVE||Bold|2
+SMART||Clever|2
+FAST||Quick|2
+SLOW||Sluggish|2
+BIG||Large|2
+SMALL||Little|2
+TALL||High|2
+COLD||Chilly|2
+HOT||Scorching|2
+RICH||Wealthy|2
+POOR||Needy|2
+KIND||Nice|2
+CALM||Peaceful|2
+LOUD||Noisy|2
+QUIET||Silent|2
+EASY||Simple|2
+HARD||Difficult|2
+START||Begin|2
+END||Finish|2
+FRIEND||Pal|2
+ENEMY||Foe|2
+JOY||Delight|2
+FEAR||Dread|2
+HOPE||Wish|2
+LOVE||Adore|2
+PEACE||Harmony|2
+WAR||Battle|2
+TRUTH||Fact|3
+LIE||Fib|2
+IDEA||Notion|3
+DREAM||Vision|2
+POWER||Might|3
+SPEED||Pace|2
+SKILL||Talent|3
+WISDOM||Sagacity|3
+ANSWER||Reply|2
+QUESTION||Query|3
+STORY||Tale|2
+WORD||Term|3
+ROAD||Street|2
+PATH||Trail|2
+CITY||Metropolis|2
+VILLAGE||Hamlet|3
+MARKET||Bazaar|3
+RIVER||Stream|2
+OCEAN||Sea|2
+LAKE||Pond|2
+FOREST||Woods|2
+VALLEY||Dale|3
+HILL||Mound|2
+GOLD||Bullion|3
+SILVER||Sterling|3
+TREASURE||Riches|3
+JOURNEY||Voyage|3
+TRAVEL||Tour|3
+BEGIN||Commence|3
+FINISH||Complete|3
+BUILD||Construct|3
+CHOOSE||Pick|2
+ASK||Inquire|3
+RUN||Sprint|2
+JUMP||Leap|2
+WALK||Stroll|2
+SING||Croon|3
+DANCE||Waltz|3
+SLEEP||Slumber|2
+EAT||Dine|2
+DRINK||Sip|2
+LAUGH||Giggle|2
+CRY||Weep|2
+SMILE||Grin|2
+SHOUT||Yell|2
+WHISPER||Murmur|3
+THINK||Ponder|3
+LEARN||Study|2
+TEACH||Instruct|3
+HELP||Aid|2
+GIVE||Donate|3
+FIND||Discover|3
+LOSE||Misplace|3
+WIN||Triumph|2
+SHINE||Glow|3
+ROUGH||Coarse|3
+SMOOTH||Sleek|3
+CLEAN||Spotless|2
+DIRTY||Filthy|2
+HUNGRY||Starving|2
+THIRSTY||Parched|3
+TIRED||Weary|3
+STRONG||Mighty|2
+WEAK||Feeble|3
+OLD||Aged|2
+NEW||Fresh|2
+YOUNG||Youthful|2
+LATE||Tardy|3
+DAWN||Sunrise|3
+DUSK||Twilight|3
+WINTER||Cold season|2
+SUMMER||Hot season|2
+AUTUMN||Fall|3
+HONEST||Truthful|3
+LOYAL||Faithful|3
+HUMBLE||Modest|3
+GENTLE||Tender|3
+SILLY||Goofy|2
+FUNNY||Comic|2
+SCARY||Creepy|2
+ODD||Strange|3
+RARE||Uncommon|3
+VAST||Immense|3
+TINY||Minute|2
+BRIGHT||Shiny|3
+DARK||Unlit|2
+EMPTY||Vacant|3
+FULL||Filled|2
+HEAVY||Weighty|3
+SAFE||Secure|3
+DANGER||Peril|3
+VICTORY||Conquest|3
+COURAGE||Valor|3
+GLORY||Fame|3
+HONOR||Respect|3
+FREEDOM||Liberty|3
+SECRET||Hidden fact|3
+MYSTERY||Enigma|3
+NOBLE||Dignified|3
+FAMOUS||Renowned|3
+ANCIENT||Very old|3
+MODERN||Current|3
+HUGE||Giant|2
+NEAT||Tidy|3
+SHY||Timid|3
+LAZY||Idle|3
+BUSY||Occupied|3
+EAGER||Keen|3
+WISE||Sage|3
 `.trim().split('\n').map(function (line) {
   var p = line.split('|');
   return { w: p[0], e: p[1] || '', d: p[2], t: parseInt(p[3], 10), l: Array.from(p[0]) };
